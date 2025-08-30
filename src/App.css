@@ -1,0 +1,38 @@
+.app {
+  width: 100vw;
+  font-family: Arial, sans-serif;
+  box-sizing: border-box;
+  padding: 20px;
+}
+
+h1 {
+  color: #333;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.map-container {
+  width: 100%;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.info {
+  text-align: center;
+  margin-bottom: 20px;
+  padding: 10px;
+  background-color: #f0f8ff;
+  border-radius: 6px;
+  font-weight: 500;
+}
+
+.vehicle-popup h4 {
+  margin: 0 0 8px 0;
+  color: #2c5aa0;
+}
+
+.vehicle-popup p {
+  margin: 4px 0;
+  font-size: 14px;
+}
