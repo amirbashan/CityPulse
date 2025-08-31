@@ -1,7 +1,7 @@
-import { Vehicle } from "./interfaces";
+import { IVehicle } from "./interfaces";
 
-export const generateSampleVehicles = (x = 1): Vehicle[] => {
-  const vehicles: Vehicle[] = [];
+export const generateSampleVehicles = (x = 1): IVehicle[] => {
+  const vehicles: IVehicle[] = [];
   const centerLat = 32.0853;
   const centerLng = 34.7818;
   const operators = ["Egged", "Dan", "Metropoline"];

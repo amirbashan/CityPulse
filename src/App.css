@@ -1,8 +1,9 @@
 .app {
   width: 100vw;
   font-family: Arial, sans-serif;
-  box-sizing: border-box;
-  padding: 20px;
+  padding: 10px 20px;
+  display: flex;
+  flex-direction: column;
 }
 
 h1 {
@@ -35,4 +36,10 @@ h1 {
 .vehicle-popup p {
   margin: 4px 0;
   font-size: 14px;
+}
+
+.pageSplit {
+  direction: ltr;
+  display: grid;
+  grid-template-columns: 60% 40%;
 }
