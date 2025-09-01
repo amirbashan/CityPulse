@@ -18,10 +18,9 @@ export default function MuinicipalityFilter() {
   };
 
   return (
-    <div className="municipality-filter">
-      <label htmlFor="municipality-select">Filter by Municipality:</label>
+    <div>
+      <label>Filter by Municipality:</label>
       <select
-        id="municipality-select"
         value={selectedMunicipality}
         onChange={onSetSelectedMunicipality}
         disabled={isLoading}

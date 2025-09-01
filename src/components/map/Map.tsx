@@ -1,27 +1,26 @@
 import { useEffect, useMemo, useState } from "react";
 import { MapContainer, TileLayer, Marker, GeoJSON } from "react-leaflet";
 import { LatLngExpression } from "leaflet";
-import { IVehicle } from "../../utils/interfaces";
-import { generateSampleVehicles } from "../../utils/generateVehicles";
 import MapPopup from "./MapPopup";
-import { useGetBucketQuery } from "../../store/slices/eliabsApi";
 import { useSelector } from "react-redux";
 import {
+  FilteredVehiclesSelector,
   municipalityDataSelector,
   selectedMunicipalitySelector,
 } from "../../store/selectors/baseSelectors";
 
 export default function Map() {
   const center: LatLngExpression = [32.0853, 34.7818];
-  const [vehicles, setVehicles] = useState<IVehicle[]>([]);
+  const [vehicles, setVehicles] = useState<any[]>([]);
+  const MAP_STYLE = useMemo(() => ({ height: "650px", width: "100%" }), []);
 
-  useGetBucketQuery();
   const municipalityData = useSelector(municipalityDataSelector);
   const selectedMunicipality = useSelector(selectedMunicipalitySelector);
+  const monitoredVehicles = useSelector(FilteredVehiclesSelector);
 
   useEffect(() => {
-    setVehicles(generateSampleVehicles(25));
-  }, []);
+    setVehicles(monitoredVehicles);
+  }, [monitoredVehicles]);
 
   const municipalityStyle = useMemo(() => {
     return (feature: any) => {
@@ -41,11 +40,7 @@ export default function Map() {
 
   return (
     <div className="map-container">
-      <MapContainer
-        center={center}
-        zoom={12}
-        style={{ height: "650px", width: "100%" }}
-      >
+      <MapContainer center={center} zoom={12} style={MAP_STYLE}>
         <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
 
         {municipalityData && (
