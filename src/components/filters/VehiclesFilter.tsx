@@ -1,4 +1,13 @@
-import React, { useState } from "react";
+import React from "react";
+import {
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
+  Button,
+  Box,
+  CircularProgress,
+} from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import {
   useGetBucketQuery,
@@ -15,9 +24,7 @@ export default function VehiclesFilter() {
   const dispatch = useDispatch();
   const siri = useSelector(siriKeysSelector);
   const [getSiriData] = useLazyGetSiriDataByKeyQuery();
-
   const startTime = useSelector(selectedTimeSelector);
-  const [isPlaying, setIsPlaying] = useState(false);
 
   const formatOptionValue = (timestamp: any) => timestamp.toString();
   const formatTimestamp = (timestamp: any) => {
@@ -25,76 +32,47 @@ export default function VehiclesFilter() {
     return date.toLocaleString();
   };
 
-  const handleStartTimeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    dispatch(setSelectedTime(e.target.value));
+  const handleStartTimeChange = (event: any) => {
+    dispatch(setSelectedTime(event.target.value));
   };
+
   const handleShow = async () => {
+    // addogic if key exist
     try {
-      // Fetch SIRI data using the selected timestamp
-      const result = await getSiriData(startTime);
-      console.log("SIRI data loaded:", result);
+      console.log("Loading SIRI data for time:", startTime);
+      await getSiriData(startTime);
     } catch (error) {
       console.error("Error loading SIRI data:", error);
     }
   };
 
-  const handlePlay = () => {
-    setIsPlaying(true);
-    console.log("Pausing...");
-  };
-  const handlePause = () => {
-    setIsPlaying(false);
-    console.log("Pausing...");
-  };
-
-  const handleStop = () => {
-    setIsPlaying(false);
-    console.log("stop:");
-  };
-
   return (
-    <div>
-      <label>Start Time:</label>
-      <select
-        value={startTime}
-        onChange={handleStartTimeChange}
-        disabled={isLoading}
-      >
-        <option value="">Select time to display</option>
-        {siri.map((timestamp) => (
-          <option key={timestamp} value={formatOptionValue(timestamp)}>
-            {formatTimestamp(timestamp)}
-          </option>
-        ))}
-      </select>
-      <button onClick={handleShow} className="actionButtons">
-        Show
-      </button>
-      <div>
-        <label>animate</label>
-        <button
-          onClick={handlePlay}
-          disabled={isLoading || !startTime}
-          className="actionButtons"
+    <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
+      <FormControl fullWidth disabled={isLoading}>
+        <InputLabel id="start-time-label">Displayed Time</InputLabel>
+        <Select
+          value={startTime || ""}
+          onChange={handleStartTimeChange}
+          displayEmpty
+          fullWidth
         >
-          ▶️
-        </button>
-        <button
-          onClick={handlePause}
-          // disabled={isLoading || !startTime}
-          className="actionButtons"
-        >
-          ⏸️
-        </button>
+          {siri.map((timestamp) => (
+            <MenuItem key={timestamp} value={formatOptionValue(timestamp)}>
+              {formatTimestamp(timestamp)}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
 
-        <button
-          onClick={handleStop}
-          disabled={isLoading || !isPlaying}
-          className="actionButtons"
-        >
-          ⏹️
-        </button>
-      </div>
-    </div>
+      <Button
+        variant="contained"
+        onClick={handleShow}
+        disabled={isLoading || !startTime}
+        sx={{ minWidth: "auto" }}
+        size="large"
+      >
+        {isLoading ? <CircularProgress size={20} /> : "Show"}
+      </Button>
+    </Box>
   );
 }

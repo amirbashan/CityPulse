@@ -71,15 +71,48 @@ export const selectedTimeSelector = createSelector(
   (basicStoreSelector) => basicStoreSelector.selectedTime
 );
 
+export const displayedTimeSelector = createSelector(
+  [basicStoreSelector],
+  (basicStoreSelector) => basicStoreSelector.displayedTime
+);
+
+export const isPlayAnimationSelector = createSelector(
+  [basicStoreSelector],
+  (basicStoreSelector) => basicStoreSelector.isPlayAnimation
+);
+
 export const monitoredVehiclesSelector = createSelector(
   [basicStoreSelector],
-  (basicStoreSelector) => basicStoreSelector.monitoredVehicles
+  (basicStoreSelector) => {
+    console.log("Monitored Vehicles:", basicStoreSelector.monitoredVehicles);
+    return basicStoreSelector.monitoredVehicles;
+  }
+);
+
+export const nextSiriKeySelector = createSelector(
+  [siriKeysSelector, displayedTimeSelector],
+  (siriKeysArray, displayedTime): string | null => {
+    if (siriKeysArray.length === 0 || !displayedTime) return null;
+    const currentIndex = siriKeysArray.indexOf(displayedTime);
+    if (currentIndex === -1 || currentIndex === siriKeysArray.length - 1)
+      return null;
+    return siriKeysArray[currentIndex + 1];
+  }
+);
+
+export const timeTillNextSiriDataSelector = createSelector(
+  [nextSiriKeySelector, displayedTimeSelector],
+  (nextSiriKey, displayedTime): number | null => {
+    if (!nextSiriKey || !displayedTime) return null;
+    return Number(nextSiriKey) - Number(displayedTime);
+  }
 );
 
 export const monitoredVehiclesByKeySelector = createSelector(
-  [monitoredVehiclesSelector, selectedTimeSelector],
-  (monitoredVehicles, selectedTime): any[] =>
-    monitoredVehicles[selectedTime] || []
+  [monitoredVehiclesSelector, displayedTimeSelector],
+  (monitoredVehicles, displayedTime): any[] => {
+    return monitoredVehicles[displayedTime] || [];
+  }
 );
 
 export const FilteredVehiclesSelector = createSelector(
@@ -90,23 +123,24 @@ export const FilteredVehiclesSelector = createSelector(
     const filteredVehicles = validVehicles.filter((vehicle) => {
       const lat = Number(vehicle.lat);
       const lng = Number(vehicle.lng);
-      
+
       if (!isFinite(lat) || !isFinite(lng)) {
-        console.warn('Invalid coordinates for vehicle:', vehicle);
+        console.warn("Invalid coordinates for vehicle:", vehicle);
         return false;
       }
-      
+
       try {
         const vehiclePoint = point([lng, lat]);
         return booleanPointInPolygon(vehiclePoint, selectedMunicipality as any);
       } catch (error) {
-        console.warn('Error checking point in polygon for vehicle:', vehicle, error);
+        console.warn(
+          "Error checking point in polygon for vehicle:",
+          vehicle,
+          error
+        );
         return false;
       }
     });
-    
-    console.log(`Total vehicles: ${validVehicles.length}, Filtered: ${filteredVehicles.length}`);
-    
     return filteredVehicles;
   }
 );

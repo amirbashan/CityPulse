@@ -1,4 +1,5 @@
 import React from "react";
+import { Autocomplete, TextField, CircularProgress } from "@mui/material";
 import { useGetMunicipalityDataQuery } from "../../store/slices/eliabsApi";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -13,25 +14,46 @@ export default function MuinicipalityFilter() {
   const selectedMunicipality = useSelector(selectedMunicipalitySelector);
   const municipalities = useSelector(municipalityNamesSelector);
 
-  const onSetSelectedMunicipality = (e: any) => {
-    dispatch(setSelectedMunicipality(e.target.value));
+  const onSetSelectedMunicipality = (event: any, value: any) => {
+    dispatch(setSelectedMunicipality(value || ""));
   };
 
   return (
-    <div>
-      <label>Filter by Municipality:</label>
-      <select
-        value={selectedMunicipality}
-        onChange={onSetSelectedMunicipality}
-        disabled={isLoading}
-      >
-        <option value="">All Municipalities</option>
-        {municipalities.map((municipality) => (
-          <option key={municipality} value={municipality}>
-            {municipality}
-          </option>
-        ))}
-      </select>
-    </div>
+    <Autocomplete
+      options={municipalities}
+      value={selectedMunicipality || null}
+      onChange={onSetSelectedMunicipality}
+      disabled={isLoading}
+      loading={isLoading}
+      clearOnEscape
+      includeInputInList
+      filterSelectedOptions
+      renderInput={(params) => (
+        <TextField
+          {...params}
+          label="Filter by Municipality"
+          placeholder="Search municipalities..."
+          slotProps={{
+            input: {
+              ...params.InputProps,
+              endAdornment: (
+                <>
+                  {isLoading ? (
+                    <CircularProgress color="inherit" size={20} />
+                  ) : null}
+                  {params.InputProps.endAdornment}
+                </>
+              ),
+            },
+          }}
+        />
+      )}
+      renderOption={(props, option) => (
+        <li {...props} key={option}>
+          {option}
+        </li>
+      )}
+      sx={{ minWidth: 250 }}
+    />
   );
 }
