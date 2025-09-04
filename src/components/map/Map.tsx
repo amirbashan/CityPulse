@@ -13,6 +13,7 @@ import {
 } from "../../store/selectors/baseSelectors";
 import { setDisplayedTime } from "../../store/slices/baseSlice";
 import { useLazyGetSiriDataByKeyQuery } from "../../store/slices/eliabsApi";
+import { createSpeedBasedBusIcon } from "../../utils/mapIcons";
 
 export default function Map() {
   const center: LatLngExpression = [32.0853, 34.7818];
@@ -81,7 +82,11 @@ export default function Map() {
         )}
 
         {vehicles.map((vehicle) => (
-          <Marker key={vehicle.id} position={[vehicle.lat, vehicle.lng]}>
+          <Marker
+            key={vehicle.id}
+            position={[vehicle.lat, vehicle.lng]}
+            icon={createSpeedBasedBusIcon(vehicle)}
+          >
             <MapPopup {...vehicle} />
           </Marker>
         ))}
