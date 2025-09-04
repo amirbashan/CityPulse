@@ -37,9 +37,7 @@ export default function VehiclesFilter() {
   };
 
   const handleShow = async () => {
-    // addogic if key exist
     try {
-      console.log("Loading SIRI data for time:", startTime);
       await getSiriData(startTime);
     } catch (error) {
       console.error("Error loading SIRI data:", error);

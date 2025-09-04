@@ -26,7 +26,7 @@ export const parseSiriVehicles = (data: IVehicleRecord[]) => {
       lat: VehicleLocation?.Latitude,
       lng: VehicleLocation?.Longitude,
       speed: Velocity,
-      route: `bus ${Bearing}`,
+      route: Bearing,
       operator: OperatorRef,
     });
   }

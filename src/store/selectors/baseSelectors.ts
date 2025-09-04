@@ -84,8 +84,14 @@ export const isPlayAnimationSelector = createSelector(
 export const monitoredVehiclesSelector = createSelector(
   [basicStoreSelector],
   (basicStoreSelector) => {
-    console.log("Monitored Vehicles:", basicStoreSelector.monitoredVehicles);
     return basicStoreSelector.monitoredVehicles;
+  }
+);
+
+export const extraFiltersSelector = createSelector(
+  [basicStoreSelector],
+  (basicStoreSelector) => {
+    return basicStoreSelector.extraFilters;
   }
 );
 
@@ -116,11 +122,15 @@ export const monitoredVehiclesByKeySelector = createSelector(
 );
 
 export const FilteredVehiclesSelector = createSelector(
-  [monitoredVehiclesByKeySelector, selectedMunicipalityData],
-  (monitoredVehicles, selectedMunicipality): any[] => {
+  [
+    monitoredVehiclesByKeySelector,
+    selectedMunicipalityData,
+    extraFiltersSelector,
+  ],
+  (monitoredVehicles, selectedMunicipality, extraFilters): any[] => {
     const validVehicles = parseSiriVehicles(monitoredVehicles);
     if (!selectedMunicipality) return validVehicles;
-    const filteredVehicles = validVehicles.filter((vehicle) => {
+    let filteredVehicles = validVehicles.filter((vehicle) => {
       const lat = Number(vehicle.lat);
       const lng = Number(vehicle.lng);
 
@@ -141,6 +151,24 @@ export const FilteredVehiclesSelector = createSelector(
         return false;
       }
     });
+    const { minSpeed, route, operator } = extraFilters;
+    if (minSpeed) {
+      filteredVehicles = filteredVehicles.filter(
+        (v) => Number(v.speed) >= Number(minSpeed)
+      );
+    }
+
+    if (route) {
+      filteredVehicles = filteredVehicles.filter(
+        (v) => v.route && String(v.route).includes(String(route))
+      );
+    }
+
+    if (operator) {
+      filteredVehicles = filteredVehicles.filter(
+        (v) => v.operator && String(v.operator).includes(String(operator))
+      );
+    }
     return filteredVehicles;
   }
 );

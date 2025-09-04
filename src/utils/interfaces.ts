@@ -59,3 +59,9 @@ export interface IVehicleRecord {
   RecordedAtTime: string;
   MonitoredVehicleJourney: IMonitoredVehicleJourney;
 }
+
+export enum ExtraFilter {
+  MinSpeed = "minSpeed",
+  Route = "route",
+  Operator = "operator",
+}

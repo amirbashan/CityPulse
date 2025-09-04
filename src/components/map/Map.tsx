@@ -34,7 +34,6 @@ export default function Map() {
 
   const getNextSiriData = async (key: string) => {
     try {
-      console.log("getNextSiriData" + key);
       await getSiriData(key);
     } catch (error) {
       console.error("Error loading SIRI data:", error);
@@ -48,7 +47,7 @@ export default function Map() {
       if (timeTillNextSiriData) {
         timer = setTimeout(() => {
           dispatch(setDisplayedTime(nextSiriKey));
-        }, (timeTillNextSiriData * 1000) / 4); // Speed up the animation by 4 times
+        }, timeTillNextSiriData * 1000);
       }
     }
     return () => {

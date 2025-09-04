@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { eliabsApi } from "./eliabsApi";
-import { IMunicipalityData } from "../../utils/interfaces";
+import { ExtraFilter, IMunicipalityData } from "../../utils/interfaces";
 
 interface IBasicStore {
   bucketData?: any;
@@ -10,6 +10,7 @@ interface IBasicStore {
   monitoredVehicles: Record<string, any[]>;
   isPlayAnimation: boolean;
   displayedTime?: any;
+  extraFilters: Record<ExtraFilter, any>;
 }
 
 const initialState: IBasicStore = {
@@ -17,6 +18,11 @@ const initialState: IBasicStore = {
   municipalityData: null,
   monitoredVehicles: {},
   isPlayAnimation: false,
+  extraFilters: {
+    [ExtraFilter.MinSpeed]: undefined,
+    [ExtraFilter.Route]: undefined,
+    [ExtraFilter.Operator]: undefined,
+  },
 };
 
 const basicSlice = createSlice({
@@ -44,6 +50,9 @@ const basicSlice = createSlice({
     stopAnimation(state) {
       state.displayedTime = state.selectedTime;
       state.isPlayAnimation = false;
+    },
+    setExtraFilters(state, action: PayloadAction<any>) {
+      state.extraFilters = { ...state.extraFilters, ...action.payload };
     },
   },
   extraReducers: (builder) => {
@@ -82,5 +91,6 @@ export const {
   playAnimation,
   pauseAnimation,
   stopAnimation,
+  setExtraFilters,
 } = basicSlice.actions;
 export default basicSlice.reducer;
