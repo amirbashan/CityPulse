@@ -4,6 +4,11 @@ A prototype web application that animates **real-time public transit data** (SIR
 
 ---
 
+## 📸 Demo
+![City Pulse Transit Visualization](./src/assets/Screenshot.png)
+
+---
+
 ## 📌 Assumptions
 - Past data doesn’t change.  
 - SIRI JSON files contain snapshots of vehicle states at regular intervals (file name = timestamp).  
