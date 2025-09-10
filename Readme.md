@@ -28,7 +28,7 @@ A prototype web application that animates **real-time public transit data** (SIR
 ## 🛠️ Technologies Used
 
 ### Frontend Stack
-- **React 18** – Component-based UI with hooks for state management.  
+- **React 19** – Component-based UI with hooks for state management.  
 - **TypeScript** – Type safety and better developer experience.  
 - **Redux Toolkit** – Centralized state management with RTK Query for API operations.  
 - **Material-UI** – Modern, accessible UI components.  
