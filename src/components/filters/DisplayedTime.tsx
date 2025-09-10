@@ -19,7 +19,7 @@ import {
 } from "../../store/selectors/baseSelectors";
 import { setSelectedTime } from "../../store/slices/baseSlice";
 
-export default function VehiclesFilter() {
+export default function DisplayedTime() {
   const { isLoading } = useGetBucketQuery();
   const dispatch = useDispatch();
   const siri = useSelector(siriKeysSelector);
